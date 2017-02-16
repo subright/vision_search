@@ -23,3 +23,7 @@ Here are more descriptions about the files.
 - cross_device_img_generator_noise.py - Based on the parameters (# of devices, # of logs, time length, and so on), it generates simularted logs according to
 
 - logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation
+
+### Citation
+
+Sungchul Kim, Sana Malik, Nedim Lipka, and Eunyee Koh, WimNet: WimNet: Vision Search for Web Logs, WWW'17 (poster)
