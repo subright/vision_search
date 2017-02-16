@@ -26,4 +26,4 @@ Here are more descriptions about the files.
 
 ### Citation
 
-Sungchul Kim, Sana Malik, Nedim Lipka, and Eunyee Koh, WimNet: WimNet: Vision Search for Web Logs, WWW'17 (poster)
+- Sungchul Kim, Sana Malik, Nedim Lipka, and Eunyee Koh, WimNet: Vision Search for Web Logs, WWW'17 (poster)
