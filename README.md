@@ -24,6 +24,6 @@ Here are more descriptions about the files.
 
 - logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation
 
-### Citation
+## Citation
 
 - Sungchul Kim, Sana Malik, Nedim Lipka, and Eunyee Koh, WimNet: Vision Search for Web Logs, WWW'17 (poster)
