@@ -20,6 +20,6 @@ Here are more descriptions about the files.
 
 - log4_dict - A file contains user activity list, [device id: site id: normalized frequency]
 
-- cross_device_img_generator_noise.py - Based on the parameters (# of devices, # of logs, time length, and so on), it generate simularted logs according to
+- cross_device_img_generator_noise.py - Based on the parameters (# of devices, # of logs, time length, and so on), it generates simularted logs according to
 
-- logencoder_trans.py - Given a set of user bahevior logs, it train CNN for learning feature representation
+- logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation
