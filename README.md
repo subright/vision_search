@@ -24,7 +24,20 @@ Here are more descriptions about the files.
 
 - logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation
 
-## Preliminary Result
+## Experiment
+
+### Description
+Experimental setting: top-5 retrieval results from 5 different approaches (RAW, HIST, SIFT, CHI, OURS from left to right)
+Dataset: 4 devices (row) and 10 websites (color)
+
+### Model
+- RAW: L1-distance between raw images
+- HIST: Euclidean distance between two vectors of color histogram in RGB channel
+- SIFT: Average distance between two sets of SIFT descriptor
+- CHI: polar distance between two subsequent sets of user activity
+- OURS: Euclidean distance between two latent representations
+
+### Result
 Q5 (+5% noise): 2 devices X 1 websites - Most approaches retrieve reasonable results except SIFT
 
 <img src="https://github.com/subright/vision_search/blob/master/result/5_q.png"/ width="150">
