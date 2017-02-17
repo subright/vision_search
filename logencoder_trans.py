@@ -8,7 +8,7 @@ import scipy.ndimage as ndi
 from six.moves import range
 import os
 import threading
-from PIL import Image
+from PIL import image
 from glob import glob
 
 def load_img(path, grayscale=False, target_size=None):
@@ -19,7 +19,7 @@ def load_img(path, grayscale=False, target_size=None):
         target_size: None (default to original size)
             or (img_height, img_width)
     '''
-    
+
     img = Image.open(path)
     if grayscale:
         img = img.convert('L')
@@ -30,10 +30,12 @@ def load_img(path, grayscale=False, target_size=None):
     return img
 
 def img_to_array(img, dim_ordering='tf'):
-    
+    ''' Convert image to array
+    '''
+
     if dim_ordering not in ['th', 'tf']:
         raise Exception('Unknown dim_ordering: ', dim_ordering)
-    
+
     # image has dim_ordering (height, width, channel)
     x = np.asarray(img, dtype='float32')
     if len(x.shape) == 3:
@@ -71,20 +73,20 @@ def load_log_images(path, dim_ordering='tf', image_shape=(4, 60, 3), window_leng
 
 	files = sorted(glob(path + '*.png'))
 
-	images = np.zeros((len(files),) + image_shape)
+	images = np.zeros((len(files), ) + image_shape)
 	for i, file in enumerate(files):
 		# print(file)
 		img = load_img(file)
 		x = img_to_array(img, dim_ordering)
 		images[i] = x
 
-		if (top_n > 0 and top_n >= i):
+		if top_n > 0 and top_n >= i:
 			break
 
 	return images, files
 
 def load_log_matrix(logfile, dictfile):
-    
+
     fin = open(dictfile)
     logDict = {}
     for line in fin:
@@ -94,12 +96,12 @@ def load_log_matrix(logfile, dictfile):
         logDict[log] = idx
 
     fin = open(logfile)
-    logList = []    
+    logList = []
     for n, line in enumerate(fin):
         tokens = line.split(',')
         index = int(tokens[0])
-        
-        log_i = []        
+
+        log_i = []
         for i in range(1, len(tokens)):
             log_i.append(int(tokens[i]))
 
@@ -136,9 +138,8 @@ def load_log_coarse_matrix(logfile, dictfile):
     logList = []
     for n, line in enumerate(fin):
         tokens = line.split(',')
-        index = int(tokens[0])
-        
-        log_i = []        
+
+        log_i = []
         for i in range(1, len(tokens)):
             subtokens = logDict[int(tokens[i].split('.')[0])].split(':')
             log_i.append(logList_coarse.index(subtokens[0] + ":" + subtokens[1]))
@@ -153,32 +154,32 @@ def load_log_coarse_matrix(logfile, dictfile):
 
 def get_transition_matrix(dim, logList, d, null_index=-1):
 
-    max_freq = -1    
+    max_freq = -1
     Ts = np.zeros((len(logList), ) + (dim, dim))
     for n, log_i in enumerate(logList):
-        Ti = np.zeros((dim,dim))
+        Ti = np.zeros((dim, dim))
 
         for j in range(len(log_i)-1):
             u = log_i[j]
 
-            Ti[u,u] += 1.0
-            max_freq = Ti[u,u] if (Ti[u,u] > max_freq) else max_freq
+            Ti[u, u] += 1.0
+            max_freq = Ti[u, u] if (Ti[u, u] > max_freq) else max_freq
 
-            for k in range(j+1, min(j+d, len(log_i))):                
+            for k in range(j+1, min(j+d, len(log_i))):
                 v = log_i[k]
 
-                if (u != null_index and v != null_index):
-                    Ti[u,v] += 1.0
+                if u != null_index and v != null_index:
+                    Ti[u, v] += 1.0
 
         # normalize
         for i in range(dim):
-            Ti[i,i] /= max_freq
+            Ti[i, i] /= max_freq
             max_freq_i = max(Ti[i])
 
-            if (max_freq_i > 0):
+            if max_freq_i > 0:
                 for j in range(dim):
-                    if (i is not j):
-                        Ti[i,j] /= max_freq_i
+                    if i is not j:
+                        Ti[i, j] /= max_freq_i
 
         Ts[n] = Ti
 
@@ -200,36 +201,14 @@ dim = Ts.shape[1]
 #print(Ts.shape, Ts.shape[1])
 
 # Model
-isLocal = True
-if (isLocal):
-    input_img = Input(shape=(3, 60, 4))
-    x = LocallyConnected2D(64, 7, 4, activation='relu')(input_img)
-    x = Convolution2D(32, 2, 1, activation='relu')(input_img)
-    x = Flatten()(x)
-    x = Dense(dim*dim, activation='relu')(x)
-    x = Dropout(0.8)(x)
-    x = Dense(dim*dim, activation='relu')(x)
-    x = Dropout(0.8)(x)
-    encoded = Dense(dim, activation='relu')(x)
-    x = Dense(dim*dim, activation='relu')(x)
-    x = Dropout(0.8)(x)
-    x = Dense(dim*dim, activation='sigmoid')(x)
-    decoded = Reshape((dim, dim))(x)
-else:
-    input_img = Input(shape=(3, 60, 4))
-    x = LocallyConnected2D(64, 7, 4, activation='relu')(input_img)
-    x = Convolution2D(32, 2, 1, activation='relu')(input_img)
-    x = Flatten()(x)
-    x = Dense(dim*dim, activation='relu')(x)
-    x = Dropout(0.2)(x)
-    x = Dense(dim*dim, activation='relu')(x)
-    x = Dropout(0.2)(x)    
-    encoded = Dense(dim, activation='relu')(x)
-    x = Dropout(0.5)(x)
-    x = Dense(dim, activation='relu')(x)
-    x = Dropout(0.5)(x)
-    x = Dense(dim, activation='sigmoid')(x)    
-    decoded = Reshape((dim, dim))(x)
+input_img = Input(shape=(3, 60, 4))
+x = LocallyConnected2D(64, 7, 4, activation='relu')(input_img)
+x = Convolution2D(32, 2, 1, activation='relu')(input_img)
+x = Flatten()(x)
+x = Dense(dim*dim, activation='relu')(x)
+encoded = Dense(dim, activation='relu')(x)
+x = Dense(dim*dim, activation='sigmoid')(x)
+decoded = Reshape((dim, dim))(x)
 
 autoencoder = Model(input_img, decoded)
 encoder = Model(input_img, encoded)
