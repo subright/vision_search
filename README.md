@@ -14,15 +14,15 @@ Here are more descriptions about the files.
 
 ### Files
 
--  png4_[5, 10, 15, 20, 25] - User behavior images with [5, 10, 15, 20, 25]% of noise over its length.
+- png4_[5, 10, 15, 20, 25] - User behavior images with [5, 10, 15, 20, 25]% of noise over its length.
 
 - log4_[5, 10, 15, 20, 25] - Files contatining user activity logs which are generated from 'cross_device_img_generator_noise.py' during image generation.
 
 - log4_dict - A file contains user activity list, [device id: site id: normalized frequency]
 
-- cross_device_img_generator_noise.py - Based on the parameters (# of devices, # of logs, time length, and so on), it generates simularted logs according to
+- cross_device_img_generator_noise.py - Based on the parameters (# of devices, # of logs, time length, and so on), it generates simularted logs according to predefined probability (temporarily removed)
 
-- logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation
+- logencoder_trans.py - Given a set of user bahevior logs, it trains CNN for learning feature representation (temporarily removed)
 
 ## Experiment
 
